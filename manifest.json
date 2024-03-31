@@ -7,7 +7,17 @@
     "default_popup": "index.html"
   },
   "permissions": ["scripting", "tabs", "activeTab"],
-  "host_permissions": ["https://*/*", "http://*/*"],
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "js": ["src/content.tsx", "src/worker/fib.ts", "patch-worker.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "background": {
+    "service_worker": "src/background.ts",
+    "type": "module"
+  },
   "icons": {
     "16": "images/icon16.png",
     "32": "images/icon32.png"

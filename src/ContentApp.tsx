@@ -4,10 +4,21 @@ import viteLogo from "./assets/vite.svg";
 import "./App.css";
 
 declare let ComlinkWorker: any;
+declare let chrome: any;
+
+// chrome.runtime.getURL('./worker_proxy.html')
+
 
 const workerInstance = new ComlinkWorker(
-  new URL("./worker/fib", import.meta.url)
+  new URL("./worker/fib", import.meta.url),
 );
+
+const invokeWebWoker = (n: number): Promise<number> => workerInstance.exposedforContenScript(n).then((result: number) => {
+  console.log('from content script', n, result)
+  return result;
+})
+
+
 
 function App() {
   const [count, setCount] = useState(30);
@@ -15,8 +26,8 @@ function App() {
 
   const onClick = async () => {
     setCount((c) => c + 1);
-    const updateFib = await workerInstance.fibonacci(count + 1);
-    setFib(updateFib);
+    const result = await invokeWebWoker(count+1)
+    setFib(result);
   };
 
   return (
