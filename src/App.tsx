@@ -1,21 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
 
-declare let ComlinkWorker: any; 
+declare let ComlinkWorker: any;
 
-
-const workerInstance = new ComlinkWorker(new URL("./worker/fib", import.meta.url))
+const workerInstance = new ComlinkWorker(
+  new URL("./worker/fib", import.meta.url)
+);
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(30);
+  const [fib, setFib] = useState(0);
 
   const onClick = async () => {
-    setCount((c) => c+1)
-    const result = await workerInstance.fibonacci(count+1)
-    console.log(count+1, result)
-  }
+    setCount((c) => c + 1);
+    const updateFib = await workerInstance.fibonacci(count + 1);
+    setFib(updateFib);
+  };
 
   return (
     <>
@@ -29,18 +31,12 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => onClick()}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <button onClick={() => onClick()}>Calculate Fib</button>
+        <p>count is {count}</p>
+        <p>Fib is {fib}</p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
